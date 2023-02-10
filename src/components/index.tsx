@@ -1,21 +1,4 @@
-import { useEffect, useState } from "react"
-import axios from 'axios'
-import { Details } from "../types/details";
-
-
-export const Pokemon = ( { data }: any) => {
-
-    const [details, setDetails] = useState<Details | null>(null);
-
-    useEffect(() => {
-        loadPokemons()
-    }, []);
-
-    const loadPokemons = async () => {
-        const res = await axios.get(data.url);
-        setDetails(res.data);
-    }
-
+export const Pokemon = ( { details }: any) => {
 
     if(!details) {
         return <div>-</div>;

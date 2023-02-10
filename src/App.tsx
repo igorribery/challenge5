@@ -21,13 +21,12 @@ EXTRA: se puder ordene por nome.
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { List } from "./types/list";
 import { Pokemon } from "./components";
 
 
 const App = () => {
 
-  const [list, setList] = useState<List[]>([]);
+  const [list, setList] = useState<any[]>([]);
 
   useEffect(() => {
     loadApi()
@@ -40,10 +39,15 @@ const App = () => {
 
     arraySort.sort((a, b) => {
 
-      return a.name.localeCompare(b.name);
+    return a.name.localeCompare(b.name);
     })
+
+    const promisesArray = arraySort.map((item) => {
+      return axios.get(item.url)
+    });
+
+    Promise.all(promisesArray).then(values => setList(values));
    
-    setList(arraySort);
   }
   
 
@@ -52,8 +56,9 @@ const App = () => {
       <h3>Desafio fernandev</h3>
       <h1>Consumindo API Pokémon</h1>
       <hr />
+      {!list.length && 'Carregando...'}
       {list.map((item) => (
-        <Pokemon key={item.name} data={item} />
+        <Pokemon key={item.data.name} details={item.data} />
       ))}
     </>
   )
